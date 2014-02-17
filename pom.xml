@@ -32,7 +32,7 @@
     <connection>scm:git:git@github.com:occamlabs/connection-pool-tester.git</connection>
     <developerConnection>scm:git:git@github.com:occamlabs/connection-pool-tester.git</developerConnection>
     <url>https://github.com/occamlabs/connection-pool-tester</url>
-    <tag>connection-pool-tester-0.3</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <distributionManagement>
@@ -124,5 +124,5 @@
     </dependency>
   </dependencies>
 
-  <version>0.3</version>
+  <version>0.4-SNAPSHOT</version>
 </project>

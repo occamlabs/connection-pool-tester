@@ -29,6 +29,13 @@
     </repository>
   </repositories>
 
+  <scm>
+    <connection>scm:git:git@github.com:occamlabs/connection-pool-tester.git</connection>
+    <developerConnection>scm:git:git@github.com:occamlabs/connection-pool-tester.git</developerConnection>
+    <url>https://github.com/occamlabs/connection-pool-tester</url>
+    <tag>HEAD</tag>
+  </scm>
+
   <distributionManagement>
     <repository>
       <id>idgis-releases</id>
@@ -85,7 +92,7 @@
         <groupId>org.deegree</groupId>
         <artifactId>deegree-sqldialect-oracle</artifactId>
         <version>3.4-pre10-SNAPSHOT-rk2</version>
-      </dependency>      
+      </dependency>
       <dependency>
         <groupId>com.oracle</groupId>
         <artifactId>ojdbc6</artifactId>

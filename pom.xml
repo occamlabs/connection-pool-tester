@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>nl.idgis</groupId>
   <artifactId>connection-pool-tester</artifactId>
@@ -33,7 +32,7 @@
     <connection>scm:git:git@github.com:occamlabs/connection-pool-tester.git</connection>
     <developerConnection>scm:git:git@github.com:occamlabs/connection-pool-tester.git</developerConnection>
     <url>https://github.com/occamlabs/connection-pool-tester</url>
-    <tag>HEAD</tag>
+    <tag>connection-pool-tester-0.3</tag>
   </scm>
 
   <distributionManagement>
@@ -125,5 +124,5 @@
     </dependency>
   </dependencies>
 
-  <version>0.3-SNAPSHOT</version>
+  <version>0.3</version>
 </project>

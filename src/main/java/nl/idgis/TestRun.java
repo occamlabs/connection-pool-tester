@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import oracle.jdbc.OracleConnection;
+import oracle.sql.ARRAY;
+import oracle.sql.ArrayDescriptor;
 
 import org.deegree.db.ConnectionProvider;
 import org.deegree.geometry.Envelope;
@@ -36,9 +38,9 @@ public class TestRun implements Runnable {
     public void run() {
         System.out.println( "- TestRun " + id + ": starting." );
         System.out.println( "- TestRun " + id + ": retrieving connection." );
-        long before = System.currentTimeMillis();
-        Connection conn = connProvider.getConnection();
-        long retrievingConnectionMillis = System.currentTimeMillis() - before;
+        final long before = System.currentTimeMillis();
+        final Connection conn = connProvider.getConnection();
+        final long retrievingConnectionMillis = System.currentTimeMillis() - before;
         System.out.println( "- TestRun " + id + ": retrieving connection took: " + retrievingConnectionMillis + " [ms]" );
         System.out.println( "- TestRun " + id + ": executing " + stmts.size() + " queries" );
         executeQueries( conn );
@@ -49,7 +51,7 @@ public class TestRun implements Runnable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        long elapsed = System.currentTimeMillis() - before;        
+        long elapsed = System.currentTimeMillis() - before;
         System.out.println( "- TestRun " + id + ": ending, elapsed: " + elapsed + " [ms]" );
     }
 
@@ -63,7 +65,7 @@ public class TestRun implements Runnable {
     private int executeQuery( final Connection conn, int queryNo, String sql ) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        try {            
+        try {
             long beforeMillis = System.currentTimeMillis();
             pstmt = prepareStatementWithBoundingBox( conn, sql );
             pstmt.setFetchSize( 1000 );
@@ -110,10 +112,28 @@ public class TestRun implements Runnable {
 
     private PreparedStatement prepareStatementWithBoundingBox( final Connection conn, final String sql )
                             throws SQLException {
+        String sql2 = sql.replace( ":gtype1", "?" );
+        sql2 = sql2.replace( ":srid1", "?" );
+        sql2 = sql2.replace( ":elem_info1", "?" );
+        sql2 = sql2.replace( ":ordinates1", "?" );
         final PreparedStatement pstmt = conn.prepareStatement( sql );
+        int i = 1;
         if ( sql.contains( "?" ) ) {
             Object o = getEnvelopeAsOracleStruct( conn );
             pstmt.setObject( 1, o );
+        } else {
+            if ( sql.contains( ":gtype1" ) ) {
+                pstmt.setInt( i++, 2003 );
+            }
+            if ( sql.contains( ":srid1" ) ) {
+                pstmt.setInt( i++, SRID );
+            }
+            if ( sql.contains( ":elem_info1" ) ) {
+                pstmt.setArray( i++, getElemInfoForEnvelope( conn ) );
+            }
+            if ( sql.contains( ":ordinates1" ) ) {
+                pstmt.setArray( i++, getOrdinateArrayForEnvelope( conn ));
+            }
         }
         return pstmt;
     }
@@ -132,6 +152,21 @@ public class TestRun implements Runnable {
             return (OracleConnection) conn;
         }
         return conn.unwrap( OracleConnection.class );
+    }
+
+    private ARRAY getElemInfoForEnvelope( final Connection conn )
+                            throws SQLException {
+        final ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "MDSYS.SDO_ELEM_INFO_ARRAY", conn );
+        final Integer[] elements = new Integer[] { 1, 1003, 3 };
+        return new ARRAY( descriptor, conn, elements );
+    }
+
+    private ARRAY getOrdinateArrayForEnvelope( final Connection conn )
+                            throws SQLException {
+        final ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "MDSYS.SDO_ORDINATE_ARRAY", conn );
+        final Double[] elements = new Double[] { env.getMin().get0(), env.getMin().get1(), env.getMax().get0(),
+                                                env.getMax().get1() };
+        return new ARRAY( descriptor, conn, elements );
     }
 
 }

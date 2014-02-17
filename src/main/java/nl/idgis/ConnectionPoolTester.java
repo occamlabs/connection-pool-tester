@@ -48,7 +48,10 @@ public class ConnectionPoolTester {
 
         final int numThreads = Integer.parseInt( args[2] );
         TestExecutor executor = new TestExecutor();
+        long before = System.currentTimeMillis();
         executor.doTests( connProvider, boxes, stmts, numThreads );
+        long elapsedMillis = System.currentTimeMillis() - before;
+        System.out.println("Total test time: " + elapsedMillis + " [ms] / per test: " + elapsedMillis / boxes.size() + " [ms]");
     }
 
     private static List<String> loadStatements( String statementsFile )
